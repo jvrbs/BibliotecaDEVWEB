@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Online - Principal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">📚 Biblioteca Online</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">Principal</a></li>
+                <li><a href="catalogo.html" class="nav-link">Catálogo</a></li>
+                <li><a href="sobre.html" class="nav-link">Sobre</a></li>
+                <li><a href="contato.html" class="nav-link">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h1>Gerenciamento de Livros</h1>
+            
+            <!-- Alertas -->
+            <div id="alert" class="alert"></div>
+
+            <!-- Formulário -->
+            <form id="livroForm">
+                <input type="hidden" id="livroId">
+                
+                <div class="form-group">
+                    <label for="titulo">Título do Livro *</label>
+                    <input type="text" id="titulo" placeholder="Digite o título do livro">
+                    <span class="error-message" id="tituloError">O título deve ter no mínimo 3 caracteres</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="autor">Autor *</label>
+                    <input type="text" id="autor" placeholder="Digite o nome do autor">
+                    <span class="error-message" id="autorError">O autor é obrigatório</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" placeholder="Digite uma breve descrição do livro"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">Adicionar Livro</button>
+                    <button type="button" class="btn btn-secondary" id="btnCancelar" style="display: none;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Carregando...</p>
+        </div>
+
+        <!-- Lista de Livros -->
+        <div class="card">
+            <h2>Lista de Livros</h2>
+            <div id="livrosLista" class="livros-grid"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

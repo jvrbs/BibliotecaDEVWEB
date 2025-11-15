@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Online - Contato</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">📚 Biblioteca Online</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Principal</a></li>
+                <li><a href="catalogo.html" class="nav-link">Catálogo</a></li>
+                <li><a href="sobre.html" class="nav-link">Sobre</a></li>
+                <li><a href="contato.html" class="nav-link active">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h1>Entre em Contato</h1>
+            <p>Estamos aqui para ajudar! Entre em contato conosco através dos canais abaixo:</p>
+            
+            <div class="contato-info">
+                <div class="contato-card">
+                    <div class="contato-icon">📧</div>
+                    <h3>Email</h3>
+                    <p>contato@bibliotecaonline.com.br</p>
+                </div>
+                <div class="contato-card">
+                    <div class="contato-icon">📱</div>
+                    <h3>Telefone</h3>
+                    <p>(11) 1234-5678</p>
+                </div>
+                <div class="contato-card">
+                    <div class="contato-icon">📍</div>
+                    <h3>Endereço</h3>
+                    <p>Rua dos Livros, 123<br>São Paulo - SP</p>
+                </div>
+            </div>
+
+            <h2>Envie uma Mensagem</h2>
+            <form id="contatoForm">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" placeholder="Seu nome">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="seu@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="mensagem">Mensagem</label>
+                    <textarea id="mensagem" placeholder="Sua mensagem"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="contato.js"></script>
+</body>
+</html>

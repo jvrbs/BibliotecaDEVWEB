@@ -3,9 +3,30 @@
 // =========================
 const API_URL = "https://jsonplaceholder.typicode.com/posts";
 
-// Estado local dos livros
-let livros = [];
+// Estado local dos livros - Iniciando com 3 livros conhecidos
+let livros = [
+    {
+        id: 1,
+        titulo: "O Príncipe",
+        autor: "Nicolau Maquiavel",
+        descricao: "Obra clássica sobre filosofia política e estratégia de poder, escrita no século XVI."
+    },
+    {
+        id: 2,
+        titulo: "Dom Casmurro",
+        autor: "Machado de Assis",
+        descricao: "Romance que narra a história de Bentinho e Capitu, explorando temas como ciúme e incerteza."
+    },
+    {
+        id: 3,
+        titulo: "1984",
+        autor: "George Orwell",
+        descricao: "Distopia sobre um regime totalitário que controla todos os aspectos da vida dos cidadãos."
+    }
+];
+
 let editandoId = null;
+let proximoId = 4; // Próximo ID para novos livros
 
 // Elementos da página
 const listaLivros = document.getElementById("listaLivros");
@@ -25,61 +46,38 @@ const btnSubmit = document.getElementById("btnSubmit");
 const btnCancelar = document.getElementById("btnCancelar");
 
 // =========================
-// 1. LISTAR LIVROS (GET)
+// 1. CARREGAR LIVROS INICIAIS
 // =========================
-async function carregarLivros() {
-    carregando.style.display = "flex";
-
-    try {
-        const resposta = await fetch(API_URL + "?_limit=10");
-        const dados = await resposta.json();
-
-        livros = dados.map(l => ({
-            id: l.id,
-            titulo: l.title,
-            autor: "Autor desconhecido",
-            descricao: l.body
-        }));
-
-        renderizarLista();
-    } catch (erro) {
-        mostrarAlerta("Erro ao carregar os livros!", "erro");
-        console.error(erro);
-    } finally {
-        carregando.style.display = "none";
-    }
+function carregarLivros() {
+    renderizarLista();
+    mostrarAlerta("Biblioteca carregada com sucesso!", "sucesso");
 }
 
 // =========================
 // 2. ADICIONAR LIVRO (POST)
 // =========================
 async function adicionarLivro(livro) {
-    const tempId = "tmp_" + Date.now();
-    const novoLivro = { id: tempId, ...livro };
+    // Adiciona com ID único
+    const novoLivro = { 
+        id: proximoId++, 
+        ...livro 
+    };
+    
     livros.unshift(novoLivro);
     renderizarLista();
-    mostrarAlerta("Livro adicionado localmente...", "sucesso");
+    mostrarAlerta("Livro adicionado com sucesso!", "sucesso");
 
+    // Simula requisição à API (opcional)
     try {
-        const resposta = await fetch(API_URL, {
+        await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(livro)
         });
-
-        const criado = await resposta.json();
-
-        // troca id temporário pelo id real
-        const index = livros.findIndex(l => l.id === tempId);
-        if (index >= 0) livros[index].id = criado.id;
-
-        mostrarAlerta("Livro salvo no servidor!", "sucesso");
+        console.log("Livro enviado para API (simulação)");
     } catch (erro) {
-        livros = livros.filter(l => l.id !== tempId);
-        mostrarAlerta("Erro ao salvar livro no servidor!", "erro");
+        console.error("Erro na simulação de envio:", erro);
     }
-
-    renderizarLista();
 }
 
 // =========================
@@ -87,47 +85,52 @@ async function adicionarLivro(livro) {
 // =========================
 async function salvarEdicao(id, dados) {
     const livroOriginal = livros.find(l => l.id === id);
+    
+    if (!livroOriginal) {
+        mostrarAlerta("Livro não encontrado!", "erro");
+        return;
+    }
+
     const backup = { ...livroOriginal };
 
     Object.assign(livroOriginal, dados);
     renderizarLista();
-    mostrarAlerta("Alteração salva localmente...", "sucesso");
+    mostrarAlerta("Livro atualizado com sucesso!", "sucesso");
 
+    // Simula requisição à API (opcional)
     try {
         await fetch(API_URL + "/" + id, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(livroOriginal)
         });
-
-        mostrarAlerta("Livro atualizado no servidor!", "sucesso");
+        console.log("Atualização enviada para API (simulação)");
     } catch (erro) {
-        Object.assign(livroOriginal, backup);
-        mostrarAlerta("Erro ao atualizar no servidor! Alteração revertida.", "erro");
+        console.error("Erro na simulação de atualização:", erro);
     }
-
-    renderizarLista();
 }
 
 // =========================
 // 4. EXCLUIR LIVRO (DELETE)
 // =========================
 async function excluirLivro(id) {
-    const backup = [...livros];
+    if (!confirm('Tem certeza que deseja excluir este livro?')) {
+        return;
+    }
 
     livros = livros.filter(l => l.id !== id);
     renderizarLista();
-    mostrarAlerta("Livro removido localmente...", "sucesso");
+    mostrarAlerta("Livro excluído com sucesso!", "sucesso");
 
+    // Simula requisição à API (opcional)
     try {
-        await fetch(API_URL + "/" + id, { method: "DELETE" });
-        mostrarAlerta("Exclusão confirmada no servidor", "sucesso");
+        await fetch(API_URL + "/" + id, { 
+            method: "DELETE" 
+        });
+        console.log("Exclusão enviada para API (simulação)");
     } catch (erro) {
-        livros = backup;
-        mostrarAlerta("Erro ao excluir no servidor!", "erro");
+        console.error("Erro na simulação de exclusão:", erro);
     }
-
-    renderizarLista();
 }
 
 // =========================
@@ -137,7 +140,7 @@ function renderizarLista() {
     listaLivros.innerHTML = "";
 
     if (livros.length === 0) {
-        listaLivros.innerHTML = "<p>Nenhum livro cadastrado.</p>";
+        listaLivros.innerHTML = '<p style="text-align: center; color: #888; padding: 2rem;">Nenhum livro cadastrado. Adicione seu primeiro livro!</p>';
         return;
     }
 
@@ -146,12 +149,12 @@ function renderizarLista() {
         card.className = "item-livro";
 
         card.innerHTML = `
-            <h3>${livro.titulo}</h3>
-            <p><strong>Autor:</strong> ${livro.autor}</p>
-            <p>${livro.descricao || "Sem descrição."}</p>
+            <h3 class="titulo-livro">${livro.titulo}</h3>
+            <p class="autor-livro"><strong>Autor:</strong> ${livro.autor}</p>
+            <p class="descricao-livro">${livro.descricao || "Sem descrição."}</p>
 
-            <div class="acoes">
-                <button class="botao botao-secundario" onclick="editarLivro(${JSON.stringify(livro).replace(/"/g, '&quot;')})">Editar</button>
+            <div class="acoes-livro">
+                <button class="botao botao-secundario" onclick="editarLivro(${livro.id})">Editar</button>
                 <button class="botao botao-perigo" onclick="excluirLivro(${livro.id})">Excluir</button>
             </div>
         `;
@@ -163,7 +166,14 @@ function renderizarLista() {
 // =========================
 // EDITAR
 // =========================
-function editarLivro(livro) {
+function editarLivro(id) {
+    const livro = livros.find(l => l.id === id);
+    
+    if (!livro) {
+        mostrarAlerta('Livro não encontrado', 'erro');
+        return;
+    }
+
     editandoId = livro.id;
 
     inputId.value = livro.id;
@@ -173,6 +183,9 @@ function editarLivro(livro) {
 
     btnSubmit.textContent = "Salvar Alterações";
     btnCancelar.style.display = "inline-block";
+
+    // Scroll suave para o formulário
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // =========================
@@ -184,6 +197,10 @@ btnCancelar.addEventListener("click", () => {
 
     btnSubmit.textContent = "Adicionar Livro";
     btnCancelar.style.display = "none";
+    
+    // Limpa mensagens de erro
+    erroTitulo.style.display = "none";
+    erroAutor.style.display = "none";
 });
 
 // =========================
@@ -196,32 +213,38 @@ formulario.addEventListener("submit", async (e) => {
     const autor = inputAutor.value.trim();
     const descricao = inputDescricao.value.trim();
 
+    // Validação
     let valido = true;
+    
+    if (titulo.length < 3) {
+        erroTitulo.style.display = "block";
+        valido = false;
+    } else {
+        erroTitulo.style.display = "none";
+    }
 
-    // validação
-    erroTitulo.style.display = titulo.length >= 3 ? "none" : "block";
-    erroAutor.style.display = autor.length > 0 ? "none" : "block";
+    if (autor.length === 0) {
+        erroAutor.style.display = "block";
+        valido = false;
+    } else {
+        erroAutor.style.display = "none";
+    }
 
-    if (titulo.length < 3 || autor.length === 0) {
+    if (!valido) {
+        mostrarAlerta("Por favor, corrija os erros no formulário", "erro");
         return;
     }
 
-    const dados = { title: titulo, body: descricao, autor, descricao, titulo };
+    const dados = {
+        titulo,
+        autor,
+        descricao
+    };
 
     if (editandoId) {
-        salvarEdicao(editandoId, {
-            titulo,
-            autor,
-            descricao
-        });
+        await salvarEdicao(editandoId, dados);
     } else {
-        adicionarLivro({
-            title: titulo,
-            body: descricao,
-            titulo,
-            autor,
-            descricao
-        });
+        await adicionarLivro(dados);
     }
 
     formulario.reset();
@@ -236,7 +259,7 @@ formulario.addEventListener("submit", async (e) => {
 // =========================
 function mostrarAlerta(msg, tipo) {
     alerta.textContent = msg;
-    alerta.className = "alerta " + tipo;
+    alerta.className = "alerta alerta-" + tipo;
 
     setTimeout(() => {
         alerta.textContent = "";
@@ -247,4 +270,7 @@ function mostrarAlerta(msg, tipo) {
 // =========================
 // INICIALIZAÇÃO
 // =========================
-carregarLivros();
+// Carrega os livros ao iniciar a página
+document.addEventListener('DOMContentLoaded', () => {
+    carregarLivros();
+});

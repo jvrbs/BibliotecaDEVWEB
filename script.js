@@ -1,6 +1,5 @@
-// =========================
+
 // CONFIGURAÇÕES
-// =========================
 const API_URL = "https://jsonplaceholder.typicode.com/posts";
 
 // Estado local dos livros - Iniciando com 3 livros conhecidos
@@ -45,17 +44,17 @@ const erroAutor = document.getElementById("erroAutor");
 const btnSubmit = document.getElementById("btnSubmit");
 const btnCancelar = document.getElementById("btnCancelar");
 
-// =========================
+
 // 1. CARREGAR LIVROS INICIAIS
-// =========================
+
 function carregarLivros() {
     renderizarLista();
     mostrarAlerta("Biblioteca carregada com sucesso!", "sucesso");
 }
 
-// =========================
+
 // 2. ADICIONAR LIVRO (POST)
-// =========================
+
 async function adicionarLivro(livro) {
     // Adiciona com ID único
     const novoLivro = { 
@@ -80,9 +79,9 @@ async function adicionarLivro(livro) {
     }
 }
 
-// =========================
+
 // 3. EDITAR LIVRO (PUT)
-// =========================
+
 async function salvarEdicao(id, dados) {
     const livroOriginal = livros.find(l => l.id === id);
     
@@ -110,9 +109,9 @@ async function salvarEdicao(id, dados) {
     }
 }
 
-// =========================
+
 // 4. EXCLUIR LIVRO (DELETE)
-// =========================
+
 async function excluirLivro(id) {
     if (!confirm('Tem certeza que deseja excluir este livro?')) {
         return;
@@ -133,9 +132,9 @@ async function excluirLivro(id) {
     }
 }
 
-// =========================
+
 // RENDERIZAÇÃO DA LISTA
-// =========================
+
 function renderizarLista() {
     listaLivros.innerHTML = "";
 
@@ -163,9 +162,8 @@ function renderizarLista() {
     });
 }
 
-// =========================
 // EDITAR
-// =========================
+
 function editarLivro(id) {
     const livro = livros.find(l => l.id === id);
     
@@ -188,9 +186,8 @@ function editarLivro(id) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// =========================
+
 // CANCELAR EDIÇÃO
-// =========================
 btnCancelar.addEventListener("click", () => {
     formulario.reset();
     editandoId = null;
@@ -203,9 +200,9 @@ btnCancelar.addEventListener("click", () => {
     erroAutor.style.display = "none";
 });
 
-// =========================
+
 // FORMULÁRIO
-// =========================
+
 formulario.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -254,9 +251,8 @@ formulario.addEventListener("submit", async (e) => {
     btnCancelar.style.display = "none";
 });
 
-// =========================
 // ALERTAS
-// =========================
+
 function mostrarAlerta(msg, tipo) {
     alerta.textContent = msg;
     alerta.className = "alerta alerta-" + tipo;
@@ -267,9 +263,9 @@ function mostrarAlerta(msg, tipo) {
     }, 3000);
 }
 
-// =========================
+
 // INICIALIZAÇÃO
-// =========================
+
 // Carrega os livros ao iniciar a página
 document.addEventListener('DOMContentLoaded', () => {
     carregarLivros();

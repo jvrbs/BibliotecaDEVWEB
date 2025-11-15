@@ -1,6 +1,4 @@
-// ============================================
 // Script para página de contato
-// ============================================
 
 const formularioContato = document.getElementById('formularioContato');
 
